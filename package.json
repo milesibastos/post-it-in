@@ -10,6 +10,7 @@
     "packages/*"
   ],
   "scripts": {
+    "dev": "yarn workspace web start",
     "start": "firebase emulators:start",
     "build": "yarn workspace web build",
     "test": "yarn workspace web test"
