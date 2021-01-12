@@ -9,6 +9,11 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "start": "firebase emulators:start",
+    "build": "yarn workspace web build",
+    "test": "yarn workspace web test"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
