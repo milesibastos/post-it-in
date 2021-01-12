@@ -14,6 +14,13 @@ const theme = responsiveFontSizes(
   createMuiTheme({
     palette: {
       type: 'dark',
+      primary: {
+        main: '#0077B5',
+      },
+      secondary: {
+        main: '#E68523',
+      },
+  
     },
     overrides: {
       MuiCssBaseline: {
