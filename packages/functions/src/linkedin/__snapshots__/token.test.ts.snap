@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should send code to request token 1`] = `
+Object {
+  "access_token": "#access_token",
+}
+`;

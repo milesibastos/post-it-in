@@ -18,6 +18,6 @@ const payload = {
 // Exchange Authorization Code for an Access Token
 // https://docs.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow?context=linkedin/consumer/context#step-3-exchange-authorization-code-for-an-access-token
 export default async function token(code:string) {
-  const {data} = await axios.post("https://www.linkedin.com/oauth/v2/accessToken", {...payload, code}, config);
-  return data as {access_token: string, expires_in: string};
+  const {data} = await axios.post<{access_token: string, expires_in: number}>("https://www.linkedin.com/oauth/v2/accessToken", {...payload, code}, config);
+  return data;
 }

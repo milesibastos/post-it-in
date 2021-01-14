@@ -1,17 +1,9 @@
 import axios from "axios";
-import handler from "./linkedin";
+import handler from "./profile";
 
 jest.mock("axios");
 
-const send = jest.fn();
-const req: any = {query: {code: "xyz"}};
-const resp: any = {send};
-const access_token = "#access_token";
-
-const post = axios.post as unknown as jest.Mock;
 const get = axios.get as unknown as jest.Mock;
-
-post.mockResolvedValue({data: {access_token}});
 get.mockImplementation((url: string) => {
   if (url.includes("/v2/me")) {
     return {data: {
@@ -90,7 +82,26 @@ get.mockImplementation((url: string) => {
   return {data: {}};
 });
 
-test("send should be called", async () => {
-  await handler(req, resp);
-  expect(send).toBeCalled();
+// Retrieving Member Profiles
+// https://docs.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin#retrieving-member-profiles
+test("should fetch profile", async () => {
+  const token = "#access_token";
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  };
+  const profile = await handler(token);
+  expect(get)
+      .toBeCalledWith(
+          "https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~:playableStreams))",
+          config
+      );
+  expect(get)
+      .toBeCalledWith(
+          "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))",
+          config
+      );
+
+  expect(profile).toMatchSnapshot();
 });
