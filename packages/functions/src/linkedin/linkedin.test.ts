@@ -1,20 +1,13 @@
-import axios from "axios";
+import nock from "nock";
 import handler from "./linkedin";
 
-jest.mock("axios");
+nock("https://www.linkedin.com")
+    .post("/oauth/v2/accessToken")
+    .reply(200, {access_token: "#access_token"});
 
-const send = jest.fn();
-const req: any = {query: {code: "xyz"}};
-const resp: any = {send};
-const access_token = "#access_token";
-
-const post = axios.post as unknown as jest.Mock;
-const get = axios.get as unknown as jest.Mock;
-
-post.mockResolvedValue({data: {access_token}});
-get.mockImplementation((url: string) => {
-  if (url.includes("/v2/me")) {
-    return {data: {
+nock("https://api.linkedin.com")
+    .get((uri) => uri.includes("/v2/me?projection"))
+    .reply(200, {
       "localizedLastName": "Milesi Bastos",
       "profilePicture": {
         "displayImage": "urn:li:digitalmediaAsset:C4D03AQGO_aSu5EocyA",
@@ -72,10 +65,11 @@ get.mockImplementation((url: string) => {
       },
       "id": "1234567890",
       "localizedFirstName": "Antonio",
-    }};
-  }
-  if (url.includes("/v2/emailAddress")) {
-    return {data: {
+    });
+
+nock("https://api.linkedin.com")
+    .get((uri) => uri.includes("/v2/emailAddress"))
+    .reply(200, {
       "elements": [
         {
           "handle~": {
@@ -84,13 +78,15 @@ get.mockImplementation((url: string) => {
           "handle": "urn:li:emailAddress:1234567890",
         },
       ],
-    }};
-  }
-
-  return {data: {}};
-});
+    });
 
 test("send should be called", async () => {
+  const send = jest.fn((payload) => {
+    expect(payload).toMatchSnapshot();
+  });
+  const req: any = {query: {code: "xyz"}};
+  const resp: any = {send};
+
   await handler(req, resp);
   expect(send).toBeCalled();
 });

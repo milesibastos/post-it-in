@@ -11,5 +11,5 @@ export default async (req: Request, resp: Response) => {
   const profile = await fetchProfile(access_token);
 
   resp.send(profile);
-  // console.debug({profile});
+  // console.debug({access_token, profile});
 };
