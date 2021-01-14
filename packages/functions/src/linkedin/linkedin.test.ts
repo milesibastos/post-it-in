@@ -115,7 +115,7 @@ test("should send code to request token", () => {
 
 // Retrieving Member Profiles
 // https://docs.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin#retrieving-member-profiles
-test("should request profile", async () => {
+test("should fetch profile", async () => {
   const config = {
     headers: {
       "Authorization": `Bearer ${access_token}`,
