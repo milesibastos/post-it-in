@@ -3,6 +3,11 @@ import handler from "./linkedin";
 import createCustomToken from "./user";
 
 jest.mock("./user");
+jest.mock("firebase-functions", () => {
+  return {
+    config: () => ({linkedin: {}}),
+  };
+});
 
 nock("https://www.linkedin.com")
     .post("/oauth/v2/accessToken")
