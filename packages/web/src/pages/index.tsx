@@ -1,35 +1,18 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import LinkedInIcon from '@material-ui/icons/LinkedIn';
+import { Switch, Route } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    padding: theme.spacing(3),
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-}));
+const LinkedIn = React.lazy(() => import('./auth/linkedin'));
+const Authentication = React.lazy(() => import('./auth/authentication'));
 
 export default function App() {
-  const classes = useStyles();
   return (
-    <main className={classes.content}>
-      <Button
-        variant="contained"
-        color="primary"
-        size="large"
-        className={classes.button}
-        startIcon={<LinkedInIcon />}>
-        Sign In with LinkedIn
-      </Button>
-    </main>
+    <Switch>
+      <Route path="/auth/linkedin">
+        <LinkedIn />
+      </Route>
+      <Route>
+        <Authentication />
+      </Route>
+    </Switch>
   );
 }

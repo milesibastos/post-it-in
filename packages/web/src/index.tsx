@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
@@ -6,6 +6,7 @@ import {
   createMuiTheme,
   responsiveFontSizes,
 } from '@material-ui/core/styles';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './pages';
 import reportWebVitals from './reportWebVitals';
@@ -14,20 +15,13 @@ const theme = responsiveFontSizes(
   createMuiTheme({
     palette: {
       type: 'dark',
-      primary: {
-        main: '#0077B5',
-      },
-      secondary: {
-        main: '#E68523',
-      },
-  
+      primary: { main: '#0077B5' },
+      secondary: { main: '#E68523' },
     },
     overrides: {
       MuiCssBaseline: {
         '@global': {
-          '#root': {
-            display: 'flex',
-          },
+          '#root': { display: 'flex' },
         },
       },
     },
@@ -38,7 +32,11 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <App />
+      <Router>
+        <Suspense fallback={<div />}>
+          <App />
+        </Suspense>
+      </Router>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
