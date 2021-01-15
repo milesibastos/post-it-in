@@ -21,6 +21,10 @@
     ],
     "rewrites": [
       {
+        "source": "/api/auth/linkedin",
+        "function": "linkedin"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

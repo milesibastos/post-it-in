@@ -4,6 +4,6 @@ import App from './index';
 
 test('renders home', () => {
   const { getByText } = render(<App />);
-  const headerElement = getByText(/post-it-in/i);
+  const headerElement = getByText(/Sign In with LinkedIn/i);
   expect(headerElement).toBeInTheDocument();
 });
