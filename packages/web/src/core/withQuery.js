@@ -6,7 +6,7 @@ export default function withQuery(key, fetcher) {
   return function (WrappedComponent) {
     const WithQuery = withProps((props) => {
       const cacheKey = isFunction(key) ? key(props) : key;
-      const query = useSWR(cacheKey, fetcher);
+      const query = useSWR(cacheKey, fetcher, {shouldRetryOnError: false}); // TODO: remove shouldRetryOnError to launch
       return query;
     })(WrappedComponent);
     WithQuery.displayName = `WithQuery(${getDisplayName(WrappedComponent)})`;

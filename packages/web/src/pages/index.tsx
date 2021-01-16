@@ -1,10 +1,15 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import compose from 'recompose/compose';
+import branch from 'recompose/branch';
+import renderComponent from 'recompose/renderComponent';
+import withAuthentication from 'core/withAuthentication';
 
 const LinkedIn = React.lazy(() => import('./auth/linkedin'));
 const Authentication = React.lazy(() => import('./auth/authentication'));
+const Main = React.lazy(() => import('./scaffold'));
 
-export default function App() {
+function PublicRoutes() {
   return (
     <Switch>
       <Route path="/auth/linkedin">
@@ -16,3 +21,18 @@ export default function App() {
     </Switch>
   );
 }
+
+function PrivateRoutes() {
+  return (
+    <Switch>
+      <Route>
+        <Main />
+      </Route>
+    </Switch>
+  );
+}
+
+export default compose(
+  withAuthentication,
+  branch(({ user }: { user: any }) => !user, renderComponent(PublicRoutes))
+)(PrivateRoutes);

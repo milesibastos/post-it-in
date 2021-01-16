@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "yarn workspace web start",
     "start": "firebase emulators:start",
-    "build": "yarn workspace web build",
+    "build": "yarn workspace web build && yarn workspace functions build",
     "test": "yarn workspace web test"
   },
   "husky": {
