@@ -3,6 +3,7 @@ import compose from 'recompose/compose';
 // import withProps from 'recompose/withProps';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import { History } from 'history';
 import qs from 'qs';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,9 +29,10 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
   data: any;
+  history: History;
 };
 
-function LinkedIn({ data }: Props) {
+function LinkedIn({ data, history }: Props) {
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -42,6 +44,7 @@ function LinkedIn({ data }: Props) {
         .then((user) => {
           // Signed in
           console.debug(user);
+          history.replace('/');
         })
         .catch((error) => {
           // var errorCode = error.code;
@@ -75,7 +78,7 @@ export default compose<Props, any>(
   withRouter,
   withQuery(({ location }: any) => {
     const { code } = qs.parse(location.search, { ignoreQueryPrefix: true });
-    return ['/api/auth/linkedin', code];
+    return code ? ['/api/auth/linkedin', code] : null;
   }, fetcher)
   // withProps(console.debug)
 )(LinkedIn);
