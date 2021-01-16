@@ -8,8 +8,17 @@ import {
 } from '@material-ui/core/styles';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+// import { FirebaseApp } from '@firebase/app-types';
+import { FirebaseAuth } from '@firebase/auth-types';
+
 import App from './pages';
 import reportWebVitals from './reportWebVitals';
+
+declare global {
+  interface Window {
+    firebase: { auth(): FirebaseAuth };
+  }
+}
 
 const theme = responsiveFontSizes(
   createMuiTheme({

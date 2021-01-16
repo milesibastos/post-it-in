@@ -1,5 +1,8 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import compose from 'recompose/compose';
+// import withProps from 'recompose/withProps';
+import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import qs from 'qs';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 
 import { authorization } from 'linkedin';
+import withQuery from 'core/withQuery';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -22,16 +26,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LinkedIn() {
-  const location = useLocation();
+type Props = {
+  data: any;
+};
+
+function LinkedIn({ data }: Props) {
   const classes = useStyles();
 
   React.useEffect(() => {
-    console.debug(
-      location,
-      qs.parse(location.search, { ignoreQueryPrefix: true })
-    );
-  }, [location]);
+    console.debug({ data });
+    if (data) {
+      window.firebase
+        .auth()
+        .signInWithCustomToken(data)
+        .then((user) => {
+          // Signed in
+          console.debug(user);
+        })
+        .catch((error) => {
+          // var errorCode = error.code;
+          // var errorMessage = error.message;
+          console.error(error);
+        });
+    }
+  }, [data]);
 
   return (
     <main className={classes.content}>
@@ -47,3 +65,17 @@ export default function LinkedIn() {
     </main>
   );
 }
+
+const fetcher = (key: string, code: string) => {
+  console.debug({ key, code });
+  return axios.get(key, { params: { code } }).then(({ data }) => data);
+};
+
+export default compose<Props, any>(
+  withRouter,
+  withQuery(({ location }: any) => {
+    const { code } = qs.parse(location.search, { ignoreQueryPrefix: true });
+    return ['/api/auth/linkedin', code];
+  }, fetcher)
+  // withProps(console.debug)
+)(LinkedIn);
