@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: yarn install
       - run: yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -20,3 +21,5 @@ jobs:
           projectId: post-it-in
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
+          REACT_APP_LINKEDIN_CLIENT_ID: '${{ secrets.LINKEDIN_CLIENT_ID }}'
+          REACT_APP_LINKEDIN_REDIRECT_URI: 'https://post-it-in.web.app/auth/linkedin'
